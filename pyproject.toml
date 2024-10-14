@@ -19,3 +19,11 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/Go-Pomegranate/Swarmy.ai"
 Issues = "https://github.com/Go-Pomegranate/Swarmy.ai/issues"
+
+[template.plugins.default]
+src-layout = true
+
+[tool.hatch.build]
+packages = [
+    {path = "typings/swarmybasecore", include = "*.pyi"},
+]

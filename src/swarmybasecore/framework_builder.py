@@ -3,14 +3,8 @@ from pathlib import Path
 from typing import Optional, Protocol
 
 from .create_venv import create_directory, create_virtualenv, write_file
-from swarmcli.builders import Agent, Swarm, SwarmBuilder, SwarmClient, Tool
-from swarmcli.utils import snake_case
-
-# %% temp
-
-# swarm_builder = SwarmBuilder(SwarmClient("http://127.0.0.1:5000"))
-# swarm = swarm_builder.from_id("9ac9eef0-870c-4c06-9079-670fb8accd72").product
-# # %%
+from .builders import Agent, Swarm, Tool
+from .utils import snake_case
 
 
 class FrameworkCreator(Protocol):
