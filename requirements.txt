@@ -4,3 +4,4 @@ openai
 fastapi
 pydantic
 requests
+langchain_core
