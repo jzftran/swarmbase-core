@@ -2,7 +2,7 @@
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 [project]
-name = "swarmybasecore"
+name = "swarmbasecore"
 version = "0.0.1"
 authors = [
   { name="Józef Tran", email="jozeftran@gmail.com" },
@@ -25,5 +25,5 @@ src-layout = true
 
 [tool.hatch.build]
 packages = [
-    {path = "typings/swarmybasecore", include = "*.pyi"},
+    {path = "typings/swarmbasecore", include = "*.pyi"},
 ]

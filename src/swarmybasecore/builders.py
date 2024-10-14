@@ -1,4 +1,4 @@
-"""Swarm CLI builders."""
+"""SwarmBase Core builders."""
 
 import keyword
 import re

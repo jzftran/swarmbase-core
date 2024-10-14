@@ -88,7 +88,7 @@ class SwarmBaseCreator(FrameworkCreator):
             for agent in swarm.agents.values()
         )
 
-        return f"""from swarmybasecore.agency_swarm.swarmy_agency import SwarmyAgency
+        return f"""from swarmbasecore.agency_swarm.swarmy_agency import SwarmyAgency
 {agents_imports}
 {swarm.instance_name} = SwarmyAgency({str(agency_relationships).replace("'", "")})
 """
@@ -106,7 +106,7 @@ class SwarmBaseCreator(FrameworkCreator):
 
         tool_names = ", ".join([tool.class_name for tool in agent.tools])
 
-        return f"""from swarmybasecore._agency_swarm.swarmy_agent import LoggedAgent
+        return f"""from swarmbasecore._agency_swarm.swarmy_agent import LoggedAgent
 {tool_imports}
 {agent.instance_name} = LoggedAgent(
     name="{agent.name}",
@@ -120,7 +120,7 @@ class SwarmBaseCreator(FrameworkCreator):
     def tool_as_string(tool: Tool) -> str:
 
         tool_description = f'"""{tool.description}"""' if tool.description else ""
-        return f"""from swarmybasecore._agency_swarm.swarmy_tool import LoggedBaseTool
+        return f"""from swarmbasecore._agency_swarm.swarmy_tool import LoggedBaseTool
 class {tool.class_name}(LoggedBaseTool):
     {tool_description}
     {tool.code}
@@ -319,7 +319,7 @@ for s in {swarm.instance_name}.stream(
 class CreatorFactory:
     @staticmethod
     def get_creator(creator_type: str) -> FrameworkCreator:
-        if creator_type == "swarmybasecore":
+        if creator_type == "swarmbasecore":
             return SwarmBaseCreator
         if creator_type == "langchain":
             return LangchainCreator
