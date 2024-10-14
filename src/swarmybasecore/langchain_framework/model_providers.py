@@ -1,8 +1,6 @@
 from collections import namedtuple
 
-from langchain_anthropic import ChatAnthropic
 from langchain_core.language_models.chat_models import BaseChatModel
-from langchain_openai import ChatOpenAI
 
 # Define a simple namedtuple for each LLM configuration
 LLMConfig = namedtuple("LLMConfig", ["provider", "provider_class", "args"])

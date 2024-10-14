@@ -536,7 +536,7 @@ class SwarmyAgency(Agency):
         CUSTOM_PATH = "/gradio"
         app = FastAPI()
 
-        static_files_path = "assets"
+        # static_files_path = "assets"
         # app.mount(
         #     "/assets", StaticFiles(directory=static_files_path), name="assets"
         # )
