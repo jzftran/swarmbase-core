@@ -1,6 +1,7 @@
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
 [project]
 name = "swarmbasecore"
 version = "0.0.1"
@@ -25,5 +26,5 @@ src-layout = true
 
 [tool.hatch.build]
 packages = [
-    {path = "typings/swarmbasecore", include = "*.pyi"},
+    "typings/swarmbasecore",
 ]
