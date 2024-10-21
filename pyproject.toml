@@ -5,26 +5,57 @@ build-backend = "hatchling.build"
 [project]
 name = "swarmbasecore"
 version = "0.0.1"
+description = "A small package wrapping the agency-swarm"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+keywords = []
 authors = [
   { name="Józef Tran", email="jozeftran@gmail.com" },
   { name="Eryk Panter", email="eryk.panter@swarmbase.ai" },
 ]
-description = "A small package wrapping the agency-swarm"
-readme = "README.md"
-requires-python = ">=3.9"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
 ]
+dependencies = []
 
 [project.urls]
 Homepage = "https://github.com/Go-Pomegranate/Swarmy.ai"
 Issues = "https://github.com/Go-Pomegranate/Swarmy.ai/issues"
 
-[template.plugins.default]
-src-layout = true
+[tool.hatch.version]
+path = "src/swarmbasecore/__about__.py"
 
-[tool.hatch.build]
-packages = [
-    "typings/swarmbasecore",
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/swarmbasecore tests}"
+
+[tool.coverage.run]
+source_pkgs = ["swarmbasecore", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/swarmbasecore/__about__.py",
+]
+
+[tool.coverage.paths]
+swarmbasecore = ["src/swarmbasecore", "*/swarmbasecore/src/swarmbasecore"]
+tests = ["tests", "*/swarmbasecore/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
 ]
