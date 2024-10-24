@@ -88,6 +88,16 @@ class SwarmClient(BaseClient):
     def __init__(self, base_url: str):
         super().__init__(base_url, "swarms")
 
+    def add_agent_to_swarm(self, swarm_id: str, agent_data: Dict[str, Any]):
+        url = f"{self.client_url}/{swarm_id}/agents"
+        return make_request("POST", url, data=agent_data)
+
+    def remove_agent_from_swarm(
+        self, swarm_id: str, agent_data: Dict[str, Any]
+    ):
+        url = f"{self.client_url}/{swarm_id}/agents"
+        return make_request("DELETE", url, data=agent_data)
+
 
 class ToolClient(BaseClient):
     def __init__(self, base_url: str):
