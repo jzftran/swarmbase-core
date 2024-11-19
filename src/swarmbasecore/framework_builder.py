@@ -71,7 +71,6 @@ class SwarmBaseCreator(FrameworkCreator):
     def swarm_as_string(swarm: Swarm) -> str:
 
         agency_relationships = []
-
         if swarm.agency_chart.manager_agent:
             agency_relationships.append(
                 swarm.agents[swarm.agency_chart.manager_agent].instance_name,
@@ -88,7 +87,7 @@ class SwarmBaseCreator(FrameworkCreator):
             for agent in swarm.agents.values()
         )
 
-        return f"""from swarmbasecore.agency_swarm.swarmy_agency import SwarmyAgency
+        return f"""from swarmbasecore.agency_swarm_framework import SwarmyAgency
 {agents_imports}
 {swarm.instance_name} = SwarmyAgency({str(agency_relationships).replace("'", "")})
 """
@@ -101,12 +100,12 @@ class SwarmBaseCreator(FrameworkCreator):
             for tool in agent.tools
         )
 
-        agent_description = f'"""{agent.description}"""' if agent.description else ""
+        agent_description = f'"""{agent.description}"""' if agent.description else '""'
         agent_instructions = agent.instuctions or ""
 
         tool_names = ", ".join([tool.class_name for tool in agent.tools])
 
-        return f"""from swarmbasecore._agency_swarm.swarmy_agent import LoggedAgent
+        return f"""from swarmbasecore.agency_swarm_framework import LoggedAgent
 {tool_imports}
 {agent.instance_name} = LoggedAgent(
     name="{agent.name}",
@@ -120,7 +119,7 @@ class SwarmBaseCreator(FrameworkCreator):
     def tool_as_string(tool: Tool) -> str:
 
         tool_description = f'"""{tool.description}"""' if tool.description else ""
-        return f"""from swarmbasecore._agency_swarm.swarmy_tool import LoggedBaseTool
+        return f"""from swarmbasecore.agency_swarm_framework import LoggedBaseTool
 class {tool.class_name}(LoggedBaseTool):
     {tool_description}
     {tool.code}
