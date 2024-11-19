@@ -1,4 +1,4 @@
-git+https://github.com/VRSEN/agency-swarm.git@v0.2.5
+agency_swarm
 gradio
 openai
 fastapi
