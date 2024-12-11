@@ -1,3 +1,30 @@
+"""swarmbasecore.agency_chart
+
+This module defines the AgencyChart class, which represents a directed graph structure
+for managing relationships between agents. It provides functionality to add, remove, 
+and query relationships, making it suitable for applications that require tracking 
+interactions among various entities.
+
+Key Features:
+- Add and manage directed and bidirectional relationships between agents.
+- Remove agents and their associated relationships from the graph.
+- Check connectivity between agents and find paths in the graph.
+- Identify top-level agents without incoming edges.
+
+Usage:
+To use the AgencyChart class, create an instance and utilize its methods to manage 
+agent relationships as needed.
+
+Example:
+    from swarmbasecore.agency_chart import AgencyChart
+    from swarmbasecore.utils import AgentRelationship, RelationshipType
+
+    chart = AgencyChart()
+    relationship = AgentRelationship(source_agent_id="agent1", target_agent_id="agent2", 
+                                      relationship_type=RelationshipType.COLLABORATES)
+    chart.add_relationship(relationship)
+"""
+
 from collections import defaultdict
 from typing import Union, Annotated, Set
 from .utils import AgentRelationship, RelationshipType

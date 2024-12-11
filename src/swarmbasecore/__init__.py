@@ -1,4 +1,4 @@
-"""SwarmBase Core module."""
+"""Imports for swarmbasecore module."""
 
 from .builders import AgentBuilder, FrameworkBuilder, SwarmBuilder, ToolBuilder
 from .agency_swarm_framework import swarmy_agency, swarmy_agent, swarmy_tool

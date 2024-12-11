@@ -1,4 +1,34 @@
-"""SwarmCLI Client."""
+"""swarmbasecore.clients
+
+This module defines client classes that facilitate communication with the SwarmBase Flask app.
+Each client is responsible for making API requests to manage resources such as
+agents, tools, frameworks, and swarms.
+The clients provide a structured way to interact with the underlying RESTful services.
+
+Key Classes:
+- BaseClient: An abstract base class that provides common functionality for 
+  all client classes, including methods for creating, listing, retrieving, 
+  updating, and deleting resources.
+- AgentClient: A client for managing agent resources, extending the BaseClient 
+  with methods specific to agent operations, such as assigning tools and 
+  managing relationships.
+- FrameworkClient: A client for managing framework resources, providing methods 
+  to add and remove swarms from frameworks.
+- SwarmClient: A client for managing swarm resources, including methods for 
+  adding and removing agents from swarms.
+- ToolClient: A client for managing tool resources, with methods for creating 
+  and manipulating tools.
+
+Usage:
+To use the clients, instantiate the appropriate client class with the base URL 
+of the API, and then call the provided methods to interact with the resources.
+
+Example:
+    from swarmbasecore.clients import AgentClient
+
+    agent_client = AgentClient(base_url="127.0.0.1:5000")
+    new_agent = agent_client.create(data={"name": "Agent 1", "description": "First agent"})
+"""
 
 from abc import ABC
 from typing import Any, Dict
@@ -92,9 +122,7 @@ class SwarmClient(BaseClient):
         url = f"{self.client_url}/{swarm_id}/agents"
         return make_request("POST", url, data=agent_data)
 
-    def remove_agent_from_swarm(
-        self, swarm_id: str, agent_data: Dict[str, Any]
-    ):
+    def remove_agent_from_swarm(self, swarm_id: str, agent_data: Dict[str, Any]):
         url = f"{self.client_url}/{swarm_id}/agents"
         return make_request("DELETE", url, data=agent_data)
 

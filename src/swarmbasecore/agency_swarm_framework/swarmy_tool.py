@@ -1,3 +1,22 @@
+"""
+swarmbasecore.agency_swarm_framework.swarmy_tool
+
+This module provides the LoggedBaseTool class, which extends the BaseTool class 
+to include logging functionality. The LoggedBaseTool class uses a decorator to 
+log the execution of its methods, including the method name, arguments, and 
+results, as well as handling any exceptions that may occur during execution.
+
+Key Classes:
+- LoggedBaseTool: Inherits from BaseTool and adds logging capabilities to the 
+  `run` method and potentially other methods.
+
+Usage:
+To create a subclass of LoggedBaseTool, simply inherit from it and define 
+your methods. The `run` method will be automatically wrapped with logging 
+functionality.
+
+"""
+
 from abc import ABC
 from functools import wraps
 
