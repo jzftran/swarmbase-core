@@ -1,4 +1,5 @@
-from re import sub
+# %%
+from re import sub, split
 from typing import NamedTuple
 from enum import Enum
 import requests
@@ -15,7 +16,12 @@ def snake_case(s):
 
 
 def pascal_case(s):
-    return sub(r"(_|-| )+", " ", s).title().replace(" ", "")
+    if s and s == "".join(
+        word.capitalize() for word in split(r"([A-Z][^A-Z]*)", s) if word
+    ):
+        return s
+    words = sub(r"(_|-| )+", " ", s).split()
+    return "".join(word.capitalize() for word in words)
 
 
 class RelationshipType(str, Enum):

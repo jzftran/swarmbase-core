@@ -1,4 +1,46 @@
-"""SwarmBase Core builders."""
+"""swarmbasecore.builders
+
+This module defines builder classes for constructing different types of 
+products within the SwarmBase Core framework. Builders provide an interface
+for creating instances of products such as **Tool**, **Agent**, *Framework**,
+and **Swarm**.
+
+Key Classes:
+
+Products:
+    - **Product**: A base class representing a generic product with common attributes 
+    and validation logic.
+    - Tool: A subclass of Product representing a tool with additional attributes 
+    like description, version, and code.
+    - Agent: A subclass of Product representing an agent with attributes for 
+    relationships and tools.
+    - Framework: A subclass of Product representing a framework.
+    - Swarm: A subclass of Product representing a collection of agents and tools.
+
+Builders:
+    - BaseBuilder: A generic builder class for creating products, providing methods 
+    to set attributes and build the product.
+    - ToolBuilder: A builder specifically for creating Tool instances.
+    - AgentBuilder: A builder specifically for creating Agent instances.
+    - FrameworkBuilder: A builder specifically for creating Framework instances.
+    - SwarmBuilder: A builder specifically for creating Swarm instances.
+
+Usage:
+To use the builders, instantiate the appropriate builder class and use its 
+methods to set the desired attributes before calling the build method to 
+create the product instance.
+
+Example:
+    from swarmbasecore.builders import ToolBuilder
+    from swarmbasecore.clients import ToolClient
+
+    tool_builder = ToolBuilder(client=ToolClient(base_url="127.0.0.1:5000"))
+    tool = (tool_builder
+            .set_name("Example Tool")
+            .set_description("This is an example tool.")
+            .set_version("1.0.0")
+            .build())
+"""
 
 import keyword
 import re
@@ -28,7 +70,6 @@ from .clients import (
 from .utils import RelationshipType, AgentRelationship, pascal_case, snake_case
 
 
-# %%
 @dataclass
 class Product:
     id: Optional[str] = None
@@ -156,7 +197,7 @@ class ToolBuilder(BaseBuilder[Tool]):
                         item["created_at"],
                         "%Y-%m-%dT%H:%M:%S.%f",
                     ),
-                )[0]
+                )[-1]
                 if data["code_versions"]
                 else {}
             )
@@ -168,13 +209,21 @@ class ToolBuilder(BaseBuilder[Tool]):
 @dataclass
 class Agent(Product):
     description: Optional[str] = None
-    instuctions: Optional[str] = None
+    instructions: Optional[str] = None
     relationships: List[AgentRelationship] = field(default_factory=list)
     tools: List[Tool] = field(default_factory=list)
 
     def __post_init__(self):
         Agent.count += 1
         super().__post_init__()
+
+    @property
+    def class_name(self):
+        return (
+            pascal_case(self.name)
+            if (self.name or self.name == "")
+            else f"Agent{Agent.count}"
+        )
 
 
 @dataclass
@@ -189,8 +238,8 @@ class AgentBuilder(BaseBuilder[Agent]):
         self._product.description = description
         return self
 
-    def set_instructions(self, instuctions: str):
-        self._product.instuctions = instuctions
+    def set_instructions(self, instructions: str):
+        self._product.instructions = instructions
         return self
 
     def add_relationship(self, relationship: AgentRelationship):
@@ -279,18 +328,20 @@ class SwarmBuilder(BaseBuilder[Swarm]):
 
     def from_id(self, id: str):
         data = self.client.get(id)
+
+        agent_builder = AgentBuilder(AgentClient(self.client.base_url))
         if data:
             self.set_id(data.get("id"))
             self.set_name(data.get("name"))
 
-            agent_builder = AgentBuilder(AgentClient(self.client.base_url))
-
             for agent_data in data.get("agents"):
                 agent: Agent = agent_builder.from_id(agent_data.get("id")).product
-
-                self.add_agent(agent)
                 for rel in agent.relationships:
                     self.add_agents_relationship(rel)
+
+                    # adds source and target agents to dict
+                    self.add_agent(agent_builder.from_id(rel.source_agent_id).product)
+                    self.add_agent(agent_builder.from_id(rel.target_agent_id).product)
 
                 for tool in agent.tools:
                     self.add_tool(tool)

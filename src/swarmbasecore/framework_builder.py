@@ -83,12 +83,20 @@ class SwarmBaseCreator(FrameworkCreator):
                 agency_relationships.append([source_agent, target_agent])
 
         agents_imports = "\n".join(
-            f"from agents.{agent.instance_name} import {agent.instance_name}"
+            f"from agents.{agent.class_name} import {agent.class_name}"
+            for agent in swarm.agents.values()
+        )
+
+        agents_init = "\n".join(
+            f"{agent.instance_name} = {agent.class_name}()"
             for agent in swarm.agents.values()
         )
 
         return f"""from swarmbasecore.agency_swarm_framework import SwarmyAgency
 {agents_imports}
+
+{agents_init}
+
 {swarm.instance_name} = SwarmyAgency({str(agency_relationships).replace("'", "")})
 """
 
@@ -101,7 +109,7 @@ class SwarmBaseCreator(FrameworkCreator):
         )
 
         agent_description = f'"""{agent.description}"""' if agent.description else '""'
-        agent_instructions = agent.instuctions or ""
+        agent_instructions = agent.instructions or ""
 
         tool_names = ", ".join([tool.class_name for tool in agent.tools])
 
@@ -110,7 +118,7 @@ class SwarmBaseCreator(FrameworkCreator):
 {agent.instance_name} = LoggedAgent(
     name="{agent.name}",
     description={agent_description},
-    instuctions="{agent_instructions}",
+    instructions="{agent_instructions}",
     tools=[{tool_names}],
     model="{agent.extra_attributes.get("model", "gpt-4o")}"
 )"""
@@ -149,14 +157,14 @@ origins = [
 
         # Create agents' directories and files
         for agent in swarm.agents.values():
-            agent_path = swarm_path / "agents" / agent.instance_name
+            agent_path = swarm_path / "agents" / agent.class_name
             create_directory(agent_path)
             write_file(
                 agent_path / "__init__.py",
-                f"from agents.{agent.instance_name} import {agent.instance_name}",
+                f"from agents.{agent.class_name} import {agent.class_name}",
             )
             write_file(
-                agent_path / f"{agent.instance_name}.py",
+                agent_path / f"{agent.class_name}.py",
                 cls.agent_as_string(agent),
             )
 
@@ -245,7 +253,7 @@ from typing import Literal
 class routeResponse(BaseModel):
     next: Literal[*options]
 
-system_prompt = \"\"\"{agent.instuctions}\"\"\"
+system_prompt = \"\"\"{agent.instructions}\"\"\"
 
 prompt = ChatPromptTemplate.from_messages(
 [
